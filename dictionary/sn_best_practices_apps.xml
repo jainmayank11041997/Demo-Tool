@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="Apps" max_length="40" name="sn_best_practices_apps" type="collection">
+        <element label="Scope" max_length="32" name="scope" reference="sys_scope" type="reference"/>
+        <index name="index">
+            <element name="scope"/>
+        </index>
+    </element>
+</database>

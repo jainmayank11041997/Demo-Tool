@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>sn_best_practices.FindViolations</api_name>
+        <caller_access>1</caller_access>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>FindViolations</name>
+        <script><![CDATA[var FindViolations = Class.create();
+FindViolations.prototype = {
+    initialize: function() {},
+
+    findInDefinitions: function(app) {
+        var utils = new BestPracticesUtil();
+        var def = new GlideRecord("sys_hub_action_type_definition");
+        def.addQuery("sys_scope", app);
+        def.query();
+		var loop_of_names=[];
+
+        while (def.next()) {
+            var active = def.getValue("active");
+            var access = def.getValue("access");
+            var category = def.getValue("category");
+            var desc = def.getValue("description");
+            var snapshotL = def.getValue("latest_snapshot");
+            var snapshotM = def.getValue("master_snapshot");
+            var name = def.getValue("name");
+            var state = def.getValue("state");
+            var updatedBy = def.getValue("sys_created_by");
+            var createdBy = def.getValue("sys_updated_by");
+            var policy = def.getValue("sys_policy");
+			var internal_name = def.getValue("internal_name");
+			
+			if(loop_of_names.indexOf(internal_name) != -1){
+				utils.createViolation(app, "properties", def.sys_id, "Action's internal name is same as other action","mandatory");
+			}else{
+				loop_of_names.push(internal_name);
+			}
+			if(name.toLowerCase().indexOf("copy of") != -1){
+				utils.createViolation(app, "properties", def.sys_id, "Action name contains 'Copy of'. Remove it","mandatory");
+			}
+
+            if (active && (category == "" || gs.nil(category))) {
+                utils.createViolation(app, "properties", def.sys_id, "Empty Category. Create or Assign a Category", "mandatory");
+            }
+
+            if (!active && (category == "" || gs.nil(category) || category.indexOf("metadata") == -1)) {
+                utils.createViolation(app, "properties", def.sys_id, "Inactive actions should be associated to a 'Metadata Retrieval' category", "mandatory");
+            }
+
+            if (desc == "" || gs.nil(desc)) {
+                utils.createViolation(app, "properties", def.sys_id, "Empty Description", "mandatory");
+            }
+
+            if (snapshotM == "" || snapshotL == "" || gs.nil(snapshotM) || gs.nil(snapshotL)) {
+                utils.createViolation(app, "properties", def.sys_id, "Snapshots are empty. Publish the action again", "mandatory");
+            }
+
+            if (state != "published") {
+                utils.createViolation(app, "properties", def.sys_id, "The state of the action is " + state + ". Publish the action", "mandatory");
+            }
+
+            if (updatedBy != "admin") {
+                utils.createViolation(app, "properties", def.sys_id, "'Updated By' field should have 'admin'", "optional");
+            }
+
+            if (createdBy != "admin") {
+                utils.createViolation(app, "properties", def.sys_id, "'Created By' field should have 'admin'", "optional");
+            }
+
+            if (policy != "read") {
+                utils.createViolation(app, "properties", def.sys_id, "Policy should be read-only", "mandatory");
+            }
+
+            if (access != "public") {
+                utils.createViolation(app, "properties", def.sys_id, "Action should be accessible in all scopes", "mandatory");
+            }
+
+
+
+            var arr = utils.verifyLabel(name);
+            if (arr != "") {
+                utils.createViolation(app, "properties", def.sys_id, "Action Name doesn't conform action naming conventions for the following words:" + arr, "mandatory");
+            }
+        }
+    },
+
+    findInFlows: function(app) {
+
+        var utils = new BestPracticesUtil();
+        var flows = new GlideRecord("sys_hub_flow");
+        flows.addQuery("sys_scope", app);
+        flows.query();
+
+        while (flows.next()) {
+            var access = flows.getValue("access");
+            var snapshotL = flows.getValue("latest_snapshot");
+            var snapshotM = flows.getValue("master_snapshot");
+            var name = flows.getValue("name");
+            var state = flows.getValue("status");
+            var updatedBy = flows.getValue("sys_created_by");
+            var createdBy = flows.getValue("sys_updated_by");
+            var policy = flows.getValue("sys_policy");
+            var sys_id = flows.sys_id;
+
+
+            if (snapshotM == "" || snapshotL == "" || gs.nil(snapshotM) || gs.nil(snapshotL)) {
+                utils.createFlowViolation(app, "properties", sys_id, "Snapshots are empty. Publish the flow again", "mandatory");
+            }
+
+            if (state != "published") {
+                utils.createFlowViolation(app, "properties", sys_id, "The state of the flow is " + state + ". Publish the flow[only production flows]", "optional");
+            }
+
+            if (updatedBy != "admin") {
+                utils.createFlowViolation(app, "properties", sys_id, "'Updated By' field should have 'admin'", "optional");
+            }
+
+            if (createdBy != "admin") {
+                utils.createFlowViolation(app, "properties", sys_id, "'Created By' field should have 'admin'", "optional");
+            }
+
+            if (policy != "read") {
+                utils.createFlowViolation(app, "properties", sys_id, "Policy should be read-only", "mandatory");
+            }
+
+            if (access != "public") {
+                utils.createFlowViolation(app, "properties", sys_id, "Flow should be accessible in all scopes", "mandatory");
+            }
+
+
+            var arr = utils.verifyLabel(name);
+            if (arr != "") {
+                utils.createFlowViolation(app, "properties", sys_id, "Flow Name doesn't conform flow naming conventions for the following words:" + arr, "mandatory");
+            }
+        }
+    },
+
+    findInInputs: function(app) {
+        var cat = "input";
+        var utils = new BestPracticesUtil();
+        var def = new GlideRecord("sys_hub_action_type_definition");
+        def.addQuery("sys_scope", app);
+        def.query();
+
+        while (def.next()) {
+            var inputs = new GlideRecord("sys_hub_action_input");
+            inputs.addQuery("sys_scope", app);
+            inputs.addQuery("model", def.sys_id);
+            inputs.query();
+            var non_mandatory_low_order = Number(inputs.getRowCount());
+            var mandatory_high_order = 1;
+            while (inputs.next()) {
+                var ctr = 0;
+                var ctr2 = 0;
+                var label = inputs.label;
+                var action = inputs.model;
+                var type = inputs.internal_type;
+                var mandatory = inputs.mandatory;
+                var order = Number(inputs.getValue("order"));
+                var result = "";
+
+                if (mandatory && (order > mandatory_high_order))
+                    mandatory_high_order = order;
+
+                if (!mandatory && (order < non_mandatory_low_order))
+                    non_mandatory_low_order = order;
+
+                var arr = utils.verifyLabel(label);
+                if (arr != "")
+                    utils.createVariableViolation(app, cat, action, "Name doesn't conform action variable naming conventions for the following words:" + arr, "mandatory", label);
+
+                var tokens = label.split(" ");
+
+                for (var i = 0; i < tokens.length; i++) {
+                    var found = utils.verifySpecialWords(tokens[i]);
+                    if (found == "failed_exists")
+                        result = result.concat(tokens[i] + ",");
+                }
+
+                if (result.endsWith(","))
+                    result = result.substr(0, result.length - 1);
+                if (result != "") {
+                    utils.createVariableViolation(app, cat, action, "The following words should be completely in capitals:" + result, "mandatory", label);
+                    if (( label.toLowerCase().indexOf("secur") != -1 || label.toLowerCase().indexOf("password") != -1 || label.toLowerCase().indexOf("key")) && type != "password2")
+                        utils.createVariableViolation(app, cat, action, "The Password input should be of Password(2 Way Encrypted) type", "mandatory", label);
+                }
+            }
+
+            if ((inputs.getRowCount() > 1) && (non_mandatory_low_order < mandatory_high_order))
+                utils.createVariableViolation(app, cat, action, "Mandatory inputs should be first in the order of inputs", "mandatory", "Inputs Order");
+        }
+
+    },
+    findInOutputs: function(app) {
+        var cat = "output";
+        var utils = new BestPracticesUtil();
+        var def = new GlideRecord("sys_hub_action_type_definition");
+        def.addQuery("sys_scope", app);
+        def.query();
+
+        while (def.next()) {
+            var outputs = new GlideRecord("sys_hub_action_output");
+            outputs.addQuery("sys_scope", app);
+            outputs.addQuery("model", def.sys_id);
+            outputs.query();
+            var errStdOutput = false;
+            var statusOutput = false;
+			var totalOutputs = Number(outputs.getRowCount());
+			var stdOPOrder =  totalOutputs;
+            while (outputs.next()) {
+                var label = outputs.label.trim();
+				var order = Number(outputs.getValue("order"));
+                var action = outputs.model;
+                var internal_name = outputs.element;
+                var type = outputs.internal_type;
+                var result = "";
+                var arr = utils.verifyLabel(label);
+
+                if (label == 'Error Message'){
+                    errStdOutput = true;
+					stdOPOrder = order < stdOPOrder ? order : stdOPOrder;
+				}
+
+                if (label.toLowerCase() == 'status'){
+                    statusOutput = true;
+					stdOPOrder = order > stdOPOrder ? order : stdOPOrder;
+				}
+
+                if (label == "variable" || /^variable\d+$/.test(label))
+                    utils.createVariableViolation(app, cat, action, "Internal name of  the output is should not have 'variable'", "mandatory", label);
+
+                if (arr != "")
+                    utils.createVariableViolation(app, cat, action, "Name doesn't conform action variable naming conventions for the following words:" + arr, "mandatory", label);
+
+                var tokens = label.split(" ");
+                for (var i = 0; i < tokens.length; i++) {
+                    var found = utils.verifySpecialWords(tokens[i]);
+                    if (found == "failed_exists") {
+                        result = result.concat(tokens[i] + ",");
+                    }
+                }
+                if (result.endsWith(","))
+                    result = result.substr(0, result.length - 1);
+
+                if (result != "")
+                    utils.createVariableViolation(app, cat, action, "The following words should be completely in capitals:" + result, "mandatory", label);
+
+
+                if (label.toLowerCase() == 'status' && type != "choice")
+                    utils.createVariableViolation(app, cat, action, "The Status output should be of choice type", "mandatory", label);
+
+                if ((  label.toLowerCase().indexOf("secur") != -1 || label.toLowerCase().indexOf("password") != -1 || label.toLowerCase().indexOf("key")) != -1 && type != "password2")
+                    utils.createVariableViolation(app, cat, action, "The Password output should be of Password(2 Way Encrypted) type", "mandatory", label);
+
+            }
+			if(stdOPOrder != totalOutputs)
+				utils.createVariableViolation(app, cat, def.sys_id, "Status and Error Message outputs should be after action specific outputs", "mandatory", "Outputs Order");
+			
+            if (!errStdOutput)
+                utils.createVariableViolation(app, cat, def.sys_id, "The standard 'Error Message' output is missing", "mandatory", "Error  Message");
+
+            if (!statusOutput)
+                utils.createVariableViolation(app, cat, def.sys_id, "The standard 'Status' output is missing", "mandatory", "Status");
+
+
+        }
+
+    },
+
+    findInSteps: function(app) {
+        var cat = "step";
+        var utils = new BestPracticesUtil();
+        var def = new GlideRecord("sys_hub_action_type_definition");
+        def.addQuery("sys_scope", app);
+        def.query();
+
+        while (def.next()) {
+            var steps = new GlideRecord("sys_hub_step_instance");
+            steps.addQuery("sys_scope", app);
+            steps.addQuery("action", def.sys_id);
+            steps.query();
+
+            var restCount = 0;
+            var rest_step = "07a762fb47222200b4fad7527c9a7129";
+            var script_step = "106afb6647032200b4fad7527c9a71e7";
+            while (steps.next()) {
+                var type = steps.step_type;
+                if (type == rest_step)
+                    restCount++;
+                if (type == script_step) {
+                    var valGR = new GlideRecord("sys_variable_value");
+                    valGR.addQuery("document_key", steps.sys_id);
+                    valGR.query();
+                    while (valGR.next()) {
+                        var script = valGR.getValue("value");
+
+                        if (!gs.nil(script) && script.indexOf("gs.info") != -1)
+                            utils.createViolation(app, cat, def.sys_id, "Remove info statements in the step" + steps.label, "mandatory");
+                    }
+                }
+
+            }
+            if (restCount > 1)
+                utils.createViolation(app, cat, def.sys_id, "It is not recommented to have more than 1 REST step. Contact PMs to split this action if required", "optional");
+
+        }
+
+    },
+
+    type: 'FindViolations'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>chakradhar.jn@snc</sys_created_by>
+        <sys_created_on>2020-02-25 12:46:40</sys_created_on>
+        <sys_id>d5a0a97bdb8344108d27a353059619c2</sys_id>
+        <sys_mod_count>126</sys_mod_count>
+        <sys_name>FindViolations</sys_name>
+        <sys_package display_value="Best Practices Spoke" source="sn_best_practices">5c37197fdb4344108d27a3530596198f</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Best Practices Spoke">5c37197fdb4344108d27a3530596198f</sys_scope>
+        <sys_update_name>sys_script_include_d5a0a97bdb8344108d27a353059619c2</sys_update_name>
+        <sys_updated_by>chakradhar.jn@snc</sys_updated_by>
+        <sys_updated_on>2020-03-19 04:01:47</sys_updated_on>
+    </sys_script_include>
+</record_update>

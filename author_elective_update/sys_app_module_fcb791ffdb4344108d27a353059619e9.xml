@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module">
+    <sys_app_module action="DELETE">
+        <active>true</active>
+        <application display_value="Best Practices Spoke">fcb791ffdb4344108d27a353059619db</application>
+        <assessment/>
+        <device_type/>
+        <filter/>
+        <hint/>
+        <homepage/>
+        <image/>
+        <link_type>LIST</link_type>
+        <map_page/>
+        <mobile_title>All</mobile_title>
+        <mobile_view_name>Mobile</mobile_view_name>
+        <name>incident</name>
+        <order>6</order>
+        <override_menu_roles>false</override_menu_roles>
+        <query/>
+        <report/>
+        <roles/>
+        <sys_class_name>sys_app_module</sys_class_name>
+        <sys_created_by>chakradhar.jn@snc</sys_created_by>
+        <sys_created_on>2020-02-25 12:07:12</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>fcb791ffdb4344108d27a353059619e9</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>All</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Best Practices Spoke" source="sn_best_practices">5c37197fdb4344108d27a3530596198f</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Best Practices Spoke">5c37197fdb4344108d27a3530596198f</sys_scope>
+        <sys_update_name>sys_app_module_fcb791ffdb4344108d27a353059619e9</sys_update_name>
+        <sys_updated_by>chakradhar.jn@snc</sys_updated_by>
+        <sys_updated_on>2020-02-25 12:07:12</sys_updated_on>
+        <timeline_page/>
+        <title>All</title>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+        <window_name/>
+    </sys_app_module>
+<sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="Best Practices Spoke">5c37197fdb4344108d27a3530596198f</application>
+        <file_path/>
+        <instance_id>5322a45bdb9484143050ac44d49619b5</instance_id>
+        <instance_name>fdihteam4</instance_name>
+        <name>sys_app_module_fcb791ffdb4344108d27a353059619e9</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module">
+    <sys_app_module action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <application display_value="Best Practices Spoke">fcb791ffdb4344108d27a353059619db</application>
+        <assessment/>
+        <device_type/>
+        <filter/>
+        <hint/>
+        <homepage/>
+        <image/>
+        <link_type>LIST</link_type>
+        <map_page/>
+        <mobile_title>All</mobile_title>
+        <mobile_view_name>Mobile</mobile_view_name>
+        <name>incident</name>
+        <order>6</order>
+        <override_menu_roles>false</override_menu_roles>
+        <query/>
+        <report/>
+        <roles/>
+        <sys_class_name>sys_app_module</sys_class_name>
+        <sys_created_by>chakradhar.jn@snc</sys_created_by>
+        <sys_created_on>2020-02-25 12:07:12</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>fcb791ffdb4344108d27a353059619e9</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>All</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Best Practices Spoke" source="sn_best_practices">5c37197fdb4344108d27a3530596198f</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Best Practices Spoke">5c37197fdb4344108d27a3530596198f</sys_scope>
+        <sys_update_name>sys_app_module_fcb791ffdb4344108d27a353059619e9</sys_update_name>
+        <sys_updated_by>chakradhar.jn@snc</sys_updated_by>
+        <sys_updated_on>2020-02-25 12:07:12</sys_updated_on>
+        <timeline_page/>
+        <title>All</title>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+        <window_name/>
+    </sys_app_module>
+</record_update>]]></payload>
+        <payload_hash>-703802379</payload_hash>
+        <record_name>All</record_name>
+        <reverted_from/>
+        <source>96a8fb811b6fc810a2a9c91b1e4bcbe6</source>
+        <source_table>sys_upgrade_history</source_table>
+        <state>previous</state>
+        <sys_created_by>chakradhar.jn@snc</sys_created_by>
+        <sys_created_on>2020-03-13 07:18:41</sys_created_on>
+        <sys_id>90b8bf811b6fc810a2a9c91b1e4bcb3f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>170d2c269850000001</sys_recorded_at>
+        <sys_updated_by>chakradhar.jn@snc</sys_updated_by>
+        <sys_updated_on>2020-03-13 07:18:41</sys_updated_on>
+        <type>Module</type>
+        <update_guid>dcb8bf815f6fc81061d31f89ae207d3e</update_guid>
+        <update_guid_history>dcb8bf815f6fc81061d31f89ae207d3e:0,1b1c57c5daebc810fafc823c9f6aa23c:-1140913152,df1c57c538ebc8103e49f287492bba31:0,4c575f411bebc8100d3b4b7af7bc70d5:778576639</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">5594949d1bafc810a2a9c91b1e4bcb4a</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>chakradhar.jn@snc</sys_created_by>
+        <sys_created_on>2020-03-13 09:20:33</sys_created_on>
+        <sys_db_object display_value="" name="sys_app_module">sys_app_module</sys_db_object>
+        <sys_id>558c89e4d288474fa46124f407813751</sys_id>
+        <sys_metadata>fcb791ffdb4344108d27a353059619e9</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>All</sys_name>
+        <sys_package display_value="Best Practices Spoke" source="sn_best_practices">5c37197fdb4344108d27a3530596198f</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="Best Practices Spoke">5c37197fdb4344108d27a3530596198f</sys_scope>
+        <sys_scope_delete display_value="">16dd183e99cc4b40ad4f05b862014400</sys_scope_delete>
+        <sys_update_name>sys_app_module_fcb791ffdb4344108d27a353059619e9</sys_update_name>
+        <sys_update_version display_value="sys_app_module_fcb791ffdb4344108d27a353059619e9">90b8bf811b6fc810a2a9c91b1e4bcb3f</sys_update_version>
+        <sys_updated_by>chakradhar.jn@snc</sys_updated_by>
+        <sys_updated_on>2020-03-13 09:20:33</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_module">
+    <sys_ui_module action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <application display_value="System Applications">e86f5df7db8344108d27a3530596193f</application>
+        <filter/>
+        <name>Apps</name>
+        <order/>
+        <path/>
+        <path_relative_to_root>false</path_relative_to_root>
+        <roles>sn_best_practices.apps_user</roles>
+        <sys_class_name>sys_ui_module</sys_class_name>
+        <sys_created_by>chakradhar.jn@snc</sys_created_by>
+        <sys_created_on>2020-02-25 12:40:47</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>286f5df7db8344108d27a35305961941</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Apps</sys_name>
+        <sys_package display_value="Best Practices Spoke" source="sn_best_practices">5c37197fdb4344108d27a3530596198f</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Best Practices Spoke">5c37197fdb4344108d27a3530596198f</sys_scope>
+        <sys_update_name>sys_ui_module_286f5df7db8344108d27a35305961941</sys_update_name>
+        <sys_updated_by>chakradhar.jn@snc</sys_updated_by>
+        <sys_updated_on>2020-02-25 12:40:47</sys_updated_on>
+        <table>sn_best_practices_apps</table>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+    </sys_ui_module>
+</record_update>
